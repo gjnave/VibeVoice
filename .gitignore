@@ -1,15 +1,2 @@
 .venv/
 venv/
-voices/*.wav
-.venv/
-venv/
-__pycache__/
-.ipynb_checkpoints/
-.pytest_cache/
-*.log
-*.tmp
-.DS_Store
-.vscode/
-.idea/
-outputs/
-voices/*.wav
