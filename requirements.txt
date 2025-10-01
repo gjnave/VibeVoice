@@ -10,3 +10,4 @@ scipy
 soundfile
 tqdm
 transformers
+pip install git+https://github.com/gjnave/VibeVoice.git
