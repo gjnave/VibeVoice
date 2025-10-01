@@ -1,0 +1,15 @@
+absl-py
+accelerate==1.6.0
+aiortc
+av
+diffusers
+flash-attn
+librosa
+ml-collections
+numpy
+scipy
+soundfile
+torch
+tqdm
+transformers
+git+https://github.com/YASSERRMD/VibeVoice.git
