@@ -1,3 +1,5 @@
+--extra-index-url https://download.pytorch.org/whl/cu128
+
 absl-py
 accelerate==1.6.0
 aiortc
@@ -9,5 +11,6 @@ numpy
 scipy
 soundfile
 tqdm
-transformers
-pip install git+https://github.com/gjnave/VibeVoice.git
+transformers==4.51.3
+git+https://github.com/gjnave/VibeVoice.git
+torch
