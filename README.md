@@ -5,7 +5,7 @@ This version includes Flash Attn </p>
 <h1>A GET GOING FAST (QUICK) Installation can be found here: <a href="https://vibevoice.getgoingfast.pro">vibevoice.getgoingfast.pro</a></h1>
 
 
-<p>To install:</p>
+<p>To install Manually:</p>
 <p>
 <uo>
 <li>git clone https://github.com/gjnave/vibevoice</li>
