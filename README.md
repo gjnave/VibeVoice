@@ -13,6 +13,7 @@
 <li>cd VibeVoice</li>
 <li>python -m venv venv</li>
 <li>call venv\scripts\activate</li>
+<li>pip install numpy gradio librosa soundfile transformers</li>
 <li>pip install torch --index-url https://download.pytorch.org/whl/cu128</li>
 <li>(*Depending on which Python you have)
 <div>pip install https://github.com/gjnave/support-files/raw/main/support/wheels/py310/flash_attn-2.8.2-cp310-cp310-win_amd64.whl</div>
