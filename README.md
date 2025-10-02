@@ -30,3 +30,5 @@ This version includes Flash Attn </p>
   <li>call venv\scripts\activate</li>
 <li> python app.py</li>
 </uo></p>
+
+[![Demo Screenshot](assets/demo-screenshot.png)](https://raw.githubusercontent.com/gjnave/VibeVoice/main/assets/example.mp4)
