@@ -220,13 +220,10 @@ class VibeVoiceDemo:
 Format requirements:
 - Use exactly {num_speakers} speakers
 - Format as: Speaker 1: ... Speaker 2: ... 
-- Do not add any other formatting beyond, Speaker 1: <content>  Speaker 2: <content> etc...
 - Make it conversational and natural
-- Do not add asterixs.
-- Do not add expressions (ie. groans, undetterred, etc...)
 - Include 5-10 exchanges between speakers
 - Cover different aspects of the topic
-- End with a concluding thought and farewell to listeners
+- End with a concluding thought
 
 Podcast transcript:"""
         return base_prompt
@@ -522,11 +519,11 @@ def create_demo_interface(demo_instance: VibeVoiceDemo):
                             
                             openrouter_model_dropdown = gr.Dropdown(
                                 choices=[
-                                    "anthropic/claude-3.5-sonnet",
-                                    "anthropic/claude-3-opus", 
-                                    "google/gemini-2.0-flash-exp:free",
-                                    "meta-llama/llama-3.1-70b-instruct:free",
-                                    "openai/gpt-4o-mini"
+                                    "x-ai/grok-4-fast:free",
+                                    "deepseek/deepseek-chat-v3.1:free", 
+                                    "moonshotai/kimi-k2:free",
+                                    "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
+                                    "meta-llama/llama-3.3-8b-instruct:free"
                                 ],
                                 value=openrouter_model.value,
                                 label="OpenRouter Model",
