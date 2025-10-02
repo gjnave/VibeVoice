@@ -13,6 +13,7 @@
 <li>cd VibeVoice</li>
 <li>python -m venv venv</li>
 <li>call venv\scripts\activate</li>
+<li>pip install torch --index-url https://download.pytorch.org/whl/cu128</li>
 <li>(*Depending on which Python you have)
 <div>pip install https://github.com/gjnave/support-files/raw/main/support/wheels/py310/flash_attn-2.8.2-cp310-cp310-win_amd64.whl</div>
 <div>(or)</div>
@@ -24,7 +25,6 @@
 <li>pip install -r requirements.txt</li>
 <li>pip install transformers==4.51.3 --force-reinstall</li>
 <li>pip install -U "triton-windows<3.5"</li>
-<li>pip install torch --index-url https://download.pytorch.org/whl/cu128</li>
 </uo>
 </p>
 <p>Remember to activate Python Virtual Environment each Time you Run:</p>
