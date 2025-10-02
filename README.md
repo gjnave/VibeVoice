@@ -12,7 +12,7 @@ This version includes Flash Attn </p>
 <li>cd VibeVoice</li>
 <li>python -m venv venv</li>
 <li>call venv\scripts\activate</li>
-<li>(*Depending on whcih Python you have)
+<li>(*Depending on which Python you have)
 <div>pip install https://github.com/gjnave/support-files/raw/main/support/wheels/py310/flash_attn-2.8.2-cp310-cp310-win_amd64.whl</div>
 <div>(or)</div>
 <div>pip install https://github.com/gjnave/support-files/raw/main/support/wheels/py311/flash_attn-2.8.2-cp311-cp311-win_amd64.whl</div>
