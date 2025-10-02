@@ -9,3 +9,4 @@ numpy
 scipy
 soundfile
 tqdm
+gradio
