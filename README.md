@@ -1,12 +1,13 @@
 <img width="1108" height="443" alt="image" src="https://github.com/gjnave/VibeVoice/blob/main/assets/yout.jpg" />
 
+
+<h1>A GET GOING FAST (Quick) Installation can be found here: <a href="https://vibevoice.getgoingfast.pro">vibevoice.getgoingfast.pro</a></h1>
 <p>The "Plus" version includes ability to connect to OpenRouter for LLM Assistance with transcript writing</br>
-This version includes Flash Attn </p>
-<h1>A GET GOING FAST (QUICK) Installation can be found here: <a href="https://vibevoice.getgoingfast.pro">vibevoice.getgoingfast.pro</a></h1>
 
 
-<p>To install Manually:</p>
+<h2>To install Manually:</h2>
 <p>
+  <div>This version includes Flash Attn </div>
 <uo>
 <li>git clone https://github.com/gjnave/vibevoice</li>
 <li>cd VibeVoice</li>
