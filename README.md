@@ -24,6 +24,7 @@
 <li>pip install -r requirements.txt</li>
 <li>pip install transformers==4.51.3 --force-reinstall</li>
 <li>pip install -U "triton-windows<3.5"</li>
+<li>pip install torch --index-url https://download.pytorch.org/whl/cu128</li>
 </uo>
 </p>
 <p>Remember to activate Python Virtual Environment each Time you Run:</p>
