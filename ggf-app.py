@@ -30,8 +30,6 @@ class ConfigManager:
         """Load configuration from file"""
         default_config = {
             "openrouter_api_key": "",
-            "llm_provider": "ollama",
-            "ollama_model": "llama2",
             "openrouter_model": "anthropic/claude-3.5-sonnet"
         }
         
@@ -139,18 +137,12 @@ class VibeVoiceDemo:
             print(f"Error reading audio {audio_path}: {e}")
             return np.array([])
 
-    def call_llm_api(self, topic: str, num_speakers: int, provider: str, api_key: str = None, model: str = None) -> str:
+    def call_llm_api(self, topic: str, num_speakers: int, api_key: str = None, model: str = None) -> str:
         """
-        Call LLM API (OpenRouter or Ollama) to generate podcast script
+        Call OpenRouter API to generate podcast script
         """
         try:
-            if provider == "openrouter":
-                return self._call_openrouter(topic, num_speakers, api_key, model)
-            elif provider == "ollama":
-                return self._call_ollama(topic, num_speakers, model)
-            else:
-                return f"Error: Unknown provider {provider}"
-                
+            return self._call_openrouter(topic, num_speakers, api_key, model)
         except Exception as e:
             return f"Error calling LLM API: {str(e)}"
 
@@ -188,30 +180,6 @@ class VibeVoiceDemo:
             return result["choices"][0]["message"]["content"]
         else:
             return f"Error: API request failed with status {response.status_code}: {response.text}"
-
-    def _call_ollama(self, topic: str, num_speakers: int, model: str) -> str:
-        """Call Ollama API"""
-        api_url = "http://localhost:11434/api/generate"
-        
-        prompt = self._build_prompt(topic, num_speakers)
-        
-        data = {
-            "model": model,
-            "prompt": prompt,
-            "stream": False
-        }
-        
-        try:
-            response = requests.post(api_url, json=data, timeout=120)
-            
-            if response.status_code == 200:
-                result = response.json()
-                return result.get("response", "No response generated")
-            else:
-                return f"Error: Ollama request failed with status {response.status_code}. Make sure Ollama is running on localhost:11434"
-                
-        except requests.exceptions.ConnectionError:
-            return "Error: Cannot connect to Ollama. Please make sure Ollama is installed and running on localhost:11434"
 
     def _build_prompt(self, topic: str, num_speakers: int) -> str:
         """Build the prompt for LLM"""
@@ -437,15 +405,13 @@ def create_demo_interface(demo_instance: VibeVoiceDemo):
 
         # Store API key in session state
         openrouter_api_key = gr.State(value=demo_instance.config_manager.get("openrouter_api_key", ""))
-        llm_provider = gr.State(value=demo_instance.config_manager.get("llm_provider", "ollama"))
-        ollama_model = gr.State(value=demo_instance.config_manager.get("ollama_model", "llama2"))
         openrouter_model = gr.State(value=demo_instance.config_manager.get("openrouter_model", "anthropic/claude-3.5-sonnet"))
 
         gr.HTML("""
         <div class="main-header">
             <h1>🎙️ Vibe Podcasting</h1>
             <p><a href="https://getgoingfast.pro" target="_blank">Get Going Fast</a></p>
-            <p><a href="https://music.youtube.com/channel/UCGV4scbVcBqo2aVTy23JJeA" target="_blank">Listen to Good music</a></p>
+            <p><a href="https://music.youtube.com/channel/UCGV4scbVcBqo2aVTy23JeA" target="_blank">Listen to Good music</a></p>
             <p>Generating Long-form Multi-speaker AI Podcast with VibeVoice</p>
         </div>
         """)
@@ -502,35 +468,7 @@ def create_demo_interface(demo_instance: VibeVoiceDemo):
                     )
                     
                     with gr.Group(visible=False) as llm_settings:
-                        with gr.Row():
-                            llm_provider_dropdown = gr.Dropdown(
-                                choices=["ollama", "openrouter"],
-                                value=llm_provider.value,
-                                label="LLM Provider",
-                                info="Choose your preferred LLM service"
-                            )
-                            
-                            ollama_model_dropdown = gr.Dropdown(
-                                choices=["llama2", "llama3", "mistral", "codellama", "phi3"],
-                                value=ollama_model.value,
-                                label="Ollama Model",
-                                visible=(llm_provider.value == "ollama")
-                            )
-                            
-                            openrouter_model_dropdown = gr.Dropdown(
-                                choices=[
-                                    "x-ai/grok-4-fast:free",
-                                    "deepseek/deepseek-chat-v3.1:free", 
-                                    "moonshotai/kimi-k2:free",
-                                    "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
-                                    "meta-llama/llama-3.3-8b-instruct:free"
-                                ],
-                                value=openrouter_model.value,
-                                label="OpenRouter Model",
-                                visible=(llm_provider.value == "openrouter")
-                            )
-                        
-                        with gr.Row(visible=(llm_provider.value == "openrouter")) as api_key_row:
+                        with gr.Row() as api_key_row:
                             api_key_input = gr.Textbox(
                                 label="OpenRouter API Key",
                                 value=openrouter_api_key.value,
@@ -540,6 +478,18 @@ def create_demo_interface(demo_instance: VibeVoiceDemo):
                             )
                             save_key_btn = gr.Button("💾 Save Key", size="sm")
                             save_status = gr.HTML("")
+                        
+                        openrouter_model_dropdown = gr.Dropdown(
+                            choices=[
+                                "x-ai/grok-4-fast:free",
+                                "deepseek/deepseek-chat-v3.1:free", 
+                                "moonshotai/kimi-k2:free",
+                                "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
+                                "meta-llama/llama-3.3-8b-instruct:free"
+                            ],
+                            value=openrouter_model.value,
+                            label="OpenRouter Model"
+                        )
                         
                         topic_input = gr.Textbox(
                             label="Podcast Topic",
@@ -604,29 +554,10 @@ def create_demo_interface(demo_instance: VibeVoiceDemo):
             outputs=[llm_settings]
         )
 
-        def update_provider_visibility(provider):
-            ollama_visible = provider == "ollama"
-            openrouter_visible = provider == "openrouter"
-            api_key_visible = provider == "openrouter"
-            
-            return (
-                gr.update(visible=ollama_visible),
-                gr.update(visible=openrouter_visible),
-                gr.update(visible=api_key_visible)
-            )
-
-        llm_provider_dropdown.change(
-            fn=update_provider_visibility,
-            inputs=[llm_provider_dropdown],
-            outputs=[ollama_model_dropdown, openrouter_model_dropdown, api_key_row]
-        )
-
         # Save API key handler
-        def save_api_key(api_key, provider, ollama_model_choice, openrouter_model_choice):
+        def save_api_key(api_key, openrouter_model_choice):
             success = True
             success &= demo_instance.config_manager.set("openrouter_api_key", api_key)
-            success &= demo_instance.config_manager.set("llm_provider", provider)
-            success &= demo_instance.config_manager.set("ollama_model", ollama_model_choice)
             success &= demo_instance.config_manager.set("openrouter_model", openrouter_model_choice)
             
             if success:
@@ -636,31 +567,13 @@ def create_demo_interface(demo_instance: VibeVoiceDemo):
 
         save_key_btn.click(
             fn=save_api_key,
-            inputs=[api_key_input, llm_provider_dropdown, ollama_model_dropdown, openrouter_model_dropdown],
+            inputs=[api_key_input, openrouter_model_dropdown],
             outputs=[save_status]
         )
 
         # Update state when dropdowns change
-        def update_llm_provider(provider):
-            return provider
-
-        def update_ollama_model(model):
-            return model
-
         def update_openrouter_model(model):
             return model
-
-        llm_provider_dropdown.change(
-            fn=update_llm_provider,
-            inputs=[llm_provider_dropdown],
-            outputs=[llm_provider]
-        )
-
-        ollama_model_dropdown.change(
-            fn=update_ollama_model,
-            inputs=[ollama_model_dropdown],
-            outputs=[ollama_model]
-        )
 
         openrouter_model_dropdown.change(
             fn=update_openrouter_model,
@@ -705,17 +618,16 @@ def create_demo_interface(demo_instance: VibeVoiceDemo):
         )
 
         # LLM script generation
-        def generate_script_with_llm(topic, num_speakers, provider, api_key, ollama_model_choice, openrouter_model_choice):
+        def generate_script_with_llm(topic, num_speakers, api_key, openrouter_model_choice):
             if not topic.strip():
                 return "Please enter a topic for the LLM to generate a script."
             
-            if provider == "openrouter" and not api_key.strip():
+            if not api_key.strip():
                 return "Error: OpenRouter API key is required. Please enter your API key in the settings above."
             
-            gr.Info(f"Generating script with {provider}... This may take a moment.")
+            gr.Info(f"Generating script with OpenRouter... This may take a moment.")
             
-            model_choice = ollama_model_choice if provider == "ollama" else openrouter_model_choice
-            script = demo_instance.call_llm_api(topic, int(num_speakers), provider, api_key, model_choice)
+            script = demo_instance.call_llm_api(topic, int(num_speakers), api_key, openrouter_model_choice)
             
             if script.startswith("Error:"):
                 gr.Warning(f"LLM generation failed: {script}")
@@ -727,9 +639,7 @@ def create_demo_interface(demo_instance: VibeVoiceDemo):
             inputs=[
                 topic_input, 
                 num_speakers, 
-                llm_provider_dropdown,
                 api_key_input,
-                ollama_model_dropdown,
                 openrouter_model_dropdown
             ],
             outputs=[script_input],
